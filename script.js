@@ -1,5 +1,5 @@
 
-const tamanhoGrade = 10;
+const tamanhoGrade = 15;
 const tabuleiro = document.getElementById('tabuleiro');
 
 for (let linha = 0; linha < tamanhoGrade; linha++) {
@@ -26,7 +26,6 @@ for (let i = 0; i < numBuracos; i++) {
     });
 }
 
-console.log(buracos); 
 
 const celulas = document.querySelectorAll('.celula');
 let turno="vertical"
@@ -80,8 +79,7 @@ celulas.forEach(celula => {
 	}
 
 
-        console.log(`Você clicou na linha ${linhaClicada} e na coluna ${colunaClicada}`);
-
 	turno=(turno=="vertical")?"horizontal":"vertical"
     });
+
 });
