@@ -5,7 +5,7 @@
 
 #tabuleiro {
     display: grid;
-    grid-template-columns: repeat(10, 1fr); /* 8 colunas iguais */
+    grid-template-columns: repeat(15, 1fr); 
     width: 400px;
     height: 400px;
     
@@ -18,7 +18,8 @@
     font-size:45px;
 }
 .celula-desativada {
-    pointer-events: none; /* Desativa eventos de clique e mouse */
-    opacity: 0.6;        /* Deixa a célula um pouco transparente para indicar que está desativada */
-    cursor: default;     /* Muda o cursor do mouse para o padrão */
+    pointer-events: none; 
+    opacity: 0.6;        
+    cursor: default;     
+
 }
