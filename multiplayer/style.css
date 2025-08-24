@@ -1,12 +1,11 @@
 
 body {
     text-align:center;
-    overflow: auto;
 }
 
 #tabuleiro {
     display: grid;
-    grid-template-columns: repeat(20, 1fr); 
+    grid-template-columns: repeat(18, 1fr); 
     
 }
 
