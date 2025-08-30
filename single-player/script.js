@@ -177,5 +177,36 @@ document.addEventListener('touchmove', (event) => {
         event.preventDefault();
     }
 });
+window.addEventListener('load', () => {
+  let lastTouchY = 0;
+  let preventPullToRefresh = false;
+  
+  window.addEventListener('touchstart', (e) => {
+    lastTouchY = e.touches[0].clientY;
+    
+    if (window.scrollY === 0) {
+      preventPullToRefresh = true;
+    } else {
+      preventPullToRefresh = false;
+    }
+  }, { passive: false });
+  
+  window.addEventListener('touchmove', (e) => {
+    const touchY = e.touches[0].clientY;
+    const touchDelta = touchY - lastTouchY;
+    lastTouchY = touchY;
+    
+    if (preventPullToRefresh && touchDelta > 0) {
+      e.preventDefault();
+      return;
+    }
+    
+    // Check if the user is scrolling up and we should allow the scroll
+    if (window.scrollY > 0 && touchDelta < 0) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+});
+
 niveis(tamanhoGrade)
 
