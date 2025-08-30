@@ -6,7 +6,7 @@ body {
 
 #tabuleiro {
     display: grid;
-    grid-template-columns: repeat(20, 1fr); 
+    grid-template-columns: repeat(20, 50px); 
     
 }
 
