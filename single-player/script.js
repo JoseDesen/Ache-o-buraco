@@ -67,6 +67,8 @@ function niveis(tamanhoGrade) {
 
 	if(tamanhoGrade>10){
 		contadorburacos.textContent = `buracos restantes: ${buracos.length}`;
+	}else{
+		contadorburacos.textContent = ``;
 	}
 
 	const celulas = document.querySelectorAll('.celula');
@@ -145,6 +147,7 @@ function niveis(tamanhoGrade) {
 			}
 			if (tentativaRestantes === 0 && buracos.length > 0) {
 				alert("Fim de jogo! Você não encontrou todos os buracos a tempo.");
+
 				tamanhoGrade = 3;
 				niveis(tamanhoGrade);
 			}
