@@ -155,5 +155,27 @@ function niveis(tamanhoGrade) {
 	});
 }
 
+let startY;
+let isAtTop = true;
+
+// Ouve o início do toque
+document.addEventListener('touchstart', (event) => {
+    // Guarda a posição inicial do dedo
+    startY = event.touches[0].clientY;
+    
+    // Checa se o usuário está no topo da página
+    isAtTop = (window.scrollY === 0);
+});
+
+// Ouve o movimento do toque
+document.addEventListener('touchmove', (event) => {
+    const currentY = event.touches[0].clientY;
+    
+    // Se o usuário está no topo da página e está puxando para baixo
+    if (isAtTop && currentY > startY) {
+        // Impede o comportamento padrão de recarregar a página
+        event.preventDefault();
+    }
+});
 niveis(tamanhoGrade)
 
