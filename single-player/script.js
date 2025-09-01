@@ -5,6 +5,10 @@ function niveis(tamanhoGrade) {
 	const tabuleiro = document.getElementById('tabuleiro');
 	tabuleiro.innerHTML = '';
 	tabuleiro.style.gridTemplateColumns = `repeat(${tamanhoGrade}, 50px)`;
+	tabuleiro.style.pointerEvents = "auto"; 
+
+	const mensagemFimJogo = document.getElementById("mensagem-fim-jogo");
+	mensagemFimJogo.style.display = "none";
 
 	let tentativaRestantes = tamanhoGrade * 2; 
 
@@ -60,13 +64,14 @@ function niveis(tamanhoGrade) {
 
 		buracos.push({
 			linha: linhaAleatoria,
-			coluna: colunaAleatoria
+			coluna: colunaAleatoria,
+			encontrado:false
 		});
 		posicoesOcupadas.add(idPosicao);
 	}
 
 	if(tamanhoGrade>10){
-		contadorburacos.textContent = `buracos restantes: ${buracos.length}`;
+		contadorburacos.textContent = `buracos restantes: ${buracos.filter(b => !b.encontrado).length}`;
 	}else{
 		contadorburacos.textContent = ``;
 	}
@@ -88,22 +93,17 @@ function niveis(tamanhoGrade) {
 			const colunaClicada = parseInt(partes[2]);
 
 			tentativaRestantes--;
-			contadortentativa.textContent = `tentativa restantes: ${tentativaRestantes}`;
+			contadortentativa.textContent = `Tentativa restantes: ${tentativaRestantes}`;
 
-			let buracoEncontradoIndex = -1;
+			let buracoEncontrado = buracos.find(b => b.linha === linhaClicada && b.coluna === colunaClicada);
 
-			for (let i = 0; i < buracos.length; i++) {
-				if (linhaClicada === buracos[i].linha && colunaClicada === buracos[i].coluna) {
-					buracoEncontradoIndex = i;
-					break;
-				}
-			}
-
-			if (buracoEncontradoIndex !== -1) {
+			if (buracoEncontrado) {
+				buracoEncontrado.encontrado = true;
 				celula.textContent = "\u25EF";
-				buracos.splice(buracoEncontradoIndex, 1);
 
-				if (buracos.length === 0) {
+				const buracosRestantes = buracos.filter(b => !b.encontrado)
+
+				if (buracosRestantes.length === 0) {
 					if (qtdBuracos == 1) {
 						alert("Você achou o buraco!");
 					} else {
@@ -112,8 +112,8 @@ function niveis(tamanhoGrade) {
 					tamanhoGrade = tamanhoGrade + 1;
 					niveis(tamanhoGrade);
 				} else {
-					alert(`Você achou um buraco! Faltam ${buracos.length} buraco(s)`);
-					contadorburacos.textContent = `buracos restantes: ${buracos.length}`;
+					alert(`Você achou um buraco! Faltam ${buracosRestantes.length} buraco(s)`);
+					contadorburacos.textContent = `buracos restantes: ${buracosRestantes.length}`;
 				}
 			} else {
 				// Lógica para encontrar o buraco mais próximo
@@ -133,27 +133,41 @@ function niveis(tamanhoGrade) {
 					const diffLinha = linhaClicada - buracoMaisProximo.linha;
 					const diffColuna = colunaClicada - buracoMaisProximo.coluna;
 
-					if (Math.abs(diffLinha) > Math.abs(diffColuna)) {
-						// Movimento vertical é maior
-						celula.textContent = diffLinha > 0 ? "\u2191" : "\u2193";
-					} else if (Math.abs(diffColuna) > Math.abs(diffLinha)) {
-						// Movimento horizontal é maior
+					if(linhaClicada === buracoMaisProximo.linha){
 						celula.textContent = diffColuna > 0 ? "\u2190" : "\u2192";
-					} else {
-						// A mesma distância na vertical e horizontal, escolha uma delas
+					}else if(colunaClicada === buracoMaisProximo.coluna){
 						celula.textContent = diffLinha > 0 ? "\u2191" : "\u2193";
+					}else{
+						const escolhaAleatorio = Math.random();
+						if (escolhaAleatorio<0.5) {
+							celula.textContent = diffLinha > 0 ? "\u2191" : "\u2193";
+						} else {
+							celula.textContent = diffColuna > 0 ? "\u2190" : "\u2192";
+						}
 					}
 				}
 			}
 			if (tentativaRestantes === 0 && buracos.length > 0) {
-				alert("Fim de jogo! Você não encontrou todos os buracos a tempo.");
+				const buracosNãoEncontrados = buracos.filter(b => !b.encontrado)
+				buracosNãoEncontrados.forEach(buraco => {
+					const celulaBuraco = document.getElementById(`celula-${buraco.linha}-${buraco.coluna}`)
+					if(celulaBuraco){
+						celulaBuraco.style.backgroundColor= 'green'
+						celulaBuraco.textContent = "\u25EF"
+					}
 
-				tamanhoGrade = 3;
-				niveis(tamanhoGrade);
+				})
+				tabuleiro.style.pointerEvents = "none"; 
+
+				mensagemFimJogo.style.display = "block";
 			}
 		});
 	});
 }
-
+const botaoReiniciar = document.getElementById("botao-fim-jogo-reiniciar")
+botaoReiniciar.addEventListener('click', () => {
+	tamanhoGrade = 3;
+	niveis(tamanhoGrade);
+})
 niveis(tamanhoGrade)
 
